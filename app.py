@@ -86,7 +86,7 @@ def load_investor_details(investor_name):
 
         # Total investment by each investor in the same top 3 verticals
         investor_amount = (df[df["vertical"].isin(top_vertical)].groupby("investor")["amount"].sum())
-        similar_investor = investor_amount[(investor_amount > lower_range) & (investor_amount < upper_range)]
+        similar_investor = investor_amount[(investor_amount > lower_range) | (investor_amount < upper_range)]
         # Remove investor name himself
         similar_investors = similar_investor[~ similar_investor.index.str.contains(investor_name, na=False)]
         # Top 3 similar investors
