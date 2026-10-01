@@ -1,4 +1,3 @@
-from turtledemo.nim import COLOR
 
 import pandas as pd
 import streamlit as st
