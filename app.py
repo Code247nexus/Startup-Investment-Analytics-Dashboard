@@ -12,8 +12,8 @@ st.title("Startup Dashboard")
 def load_investor_details(investor_name):
     st.title(investor_name,text_alignment="center")
     #load recent 5 investment of investor
-    last5_df = df[df["investor"].str.contains(investor_name)].head()[["date","startup","vertical","city","round","amount"]]
-    st.subheader("recent investment")
+    last5_df = (df[df["investor"].str.contains(investor_name, na=False)].sort_values("date", ascending=False).head(5)[["date", "startup", "vertical", "city", "round", "amount"]])
+    st.subheader("Recent Investment")
     st.dataframe(last5_df)
 
 
@@ -87,7 +87,7 @@ def load_investor_details(investor_name):
 
         # Total investment by each investor in the same top 3 verticals
         investor_amount = (df[df["vertical"].isin(top_vertical)].groupby("investor")["amount"].sum())
-        similar_investor = investor_amount[(investor_amount > lower_range) | (investor_amount < upper_range)]
+        similar_investor = investor_amount[(investor_amount > lower_range) & (investor_amount < upper_range)]
         # Remove investor name himself
         similar_investors = similar_investor[~ similar_investor.index.str.contains(investor_name, na=False)]
         # Top 3 similar investors
@@ -197,9 +197,9 @@ def load_startup_analysis(name) :
     col5, col6=st.columns(2)
 
 
-    vertical_name = df[df["startup"].str.contains("BYJU’S")]["vertical"].iloc[0]
-    sub_vertical = df[df["startup"].str.contains("BYJU’S")]["subvertical"].iloc[0]
-    city = df[df["startup"].str.contains("BYJU’S")]["city"].iloc[0]
+    vertical_name = df[df["startup"].str.contains(name)]["vertical"].iloc[0]
+    sub_vertical = df[df["startup"].str.contains(name)]["subvertical"].iloc[0]
+    city = df[df["startup"].str.contains(name)]["city"].iloc[0]
     funding_rounds = df[df["startup"] == startup_name]["round"].count()
 
     with col1:
